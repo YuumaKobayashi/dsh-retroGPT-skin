@@ -1,0 +1,27 @@
+# 开发期探针产物（tools/ 下的脚本可随时重新生成）
+.probe/
+
+# 依赖
+node_modules/
+
+# 系统 / 编辑器杂项
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 日志与临时文件
+*.log
+*.tmp
+*.bak
+
+# Private configuration and release artifacts
+.env
+.env.*
+.npmrc
+.npm-cache/
+*.pem
+*.key
+*.p12
+*.pfx
+*.tgz
+__pycache__/

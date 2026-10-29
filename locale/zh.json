@@ -1,0 +1,10 @@
+{
+  "meta": {
+    "title": "RetroGPT 复古皮肤",
+    "description": "为 DSH Web UI 提供经典 ChatGPT 复古外观：侧边栏始终深色，聊天区支持浅色/深色，复古排版，侧边栏底部一键切换浅色与深色。"
+  },
+  "toggle": {
+    "toDark": "切换聊天区为深色",
+    "toLight": "切换聊天区为浅色"
+  }
+}

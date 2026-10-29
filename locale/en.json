@@ -1,0 +1,10 @@
+{
+  "meta": {
+    "title": "RetroGPT Skin",
+    "description": "Classic ChatGPT look for the DSH Web UI: a permanently dark sidebar with light and dark chat surfaces, retro typography, and a one-click light/dark toggle in the sidebar footer."
+  },
+  "toggle": {
+    "toDark": "Switch chat to dark",
+    "toLight": "Switch chat to light"
+  }
+}

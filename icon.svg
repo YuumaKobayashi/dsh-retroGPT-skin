@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="RetroGPT Skin">
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#202123"/>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="none" stroke="#10A37F" stroke-opacity="0.45" stroke-width="2"/>
+  <path d="M17 24h8l7 16h-8z" fill="#10A37F"/>
+  <path d="M45 24v10c0 4-3 6-7 6" fill="none" stroke="#ECECEC" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="45" cy="22" r="3.5" fill="#10A37F"/>
+</svg>
