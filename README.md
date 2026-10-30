@@ -93,7 +93,7 @@ npm install -g dsh-retrogpt-skin@0.7.5
 从 GitHub 克隆项目：
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/dsh-retroGPT-skin.git
+git clone https://github.com/YuumaKobayashi/dsh-retroGPT-skin.git
 cd dsh-retroGPT-skin
 ```
 
