@@ -1,5 +1,25 @@
 # Release notes
 
+## 0.7.5 — 2026-10-30
+
+### 修复
+
+- 打字机光标出现两个：`[data-rgs-typing] :is(p, li, …):last-child::after` 会给**每个**"自己是父元素最后一个子节点"的块都画一次，段落里套列表就会同时命中 `<p>` 和 `<li>`。现在由 `client.js` 的 `markTyping()` 在流式期间只挑**文档顺序最靠后**的那个文本块，打上 `[data-rgs-caret]`，样式表只挂在这一个属性上；退出流式或禁用开关时一并清除。
+
+### 打包 / 安装
+
+- `npm publish` 默认就把 `latest` 指向新版本，所以发 0.7.5 也会顺带修好"按包名安装拿到 0.0.0-stage 空壳"的问题。
+- 仍可在有 npm 登录的环境里执行 `npm dist-tag add dsh-retrogpt-skin@0.7.5 latest`；详见下面 0.7.4 的补充说明。
+
+## 0.7.4 — 2026-10-29
+
+### 打包 / 安装补充（2026-10-30）
+
+- npm 上 `latest` 标签仍指向最初占位的 `dsh-retrogpt-skin@0.0.0-stage`（只有一个 `package.json`，没有 `dsh.bundle`）；插件管理器按包名安装时取 `latest`，会把空壳当成插件包并报"这个包没有声明组合包，无法作为插件安装"。
+- 临时绕法：安装时写全版本 `dsh-retrogpt-skin@0.7.4`。
+- 正式修复（需 npm 登录）：`npm dist-tag add dsh-retrogpt-skin@0.7.4 latest`；可选 `npm unpublish dsh-retrogpt-skin@0.0.0-stage`。
+- 已核对 registry 上的 0.7.4 包内含 `package.json`、`index.js`、`client.js`、`cordis.patch.yml`、`locale/*.json`、`icon.svg`、README 与 release notes，共 9 个文件；包内 `dsh.bundle.patch` 是对象，校验可过。
+
 ## 0.7.4 — 2026-10-29
 
 - 开发工具改为通过命令行接收图片路径，移除本机用户目录和附件标识。

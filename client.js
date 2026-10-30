@@ -192,11 +192,12 @@ window.__ModuleLoader__.load({
 }
 
 /* Typewriter caret. While a turn streams, client.js marks the newest reply row
-   with [data-rgs-typing]; the caret rides at the end of that row's last text
-   block, so it sits right after the last streamed character instead of taking a
-   line of its own. Nothing inside the host markdown is rewritten — the host still
-   owns every character it renders. */
-:root[data-rgs-skin][data-rgs-typewriter="on"] [data-rgs-typing] :is(p, li, pre, h1, h2, h3, h4, h5, h6, blockquote, td, th, dt, dd):last-child::after {
+   with [data-rgs-typing] and picks exactly ONE text block inside it — the last one
+   in document order — with [data-rgs-caret]. Matching :last-child alone drew a caret
+   for every block that happened to close its parent (a paragraph AND the list item
+   inside it), so the block is chosen once in JS instead. Nothing inside the host
+   markdown is rewritten — the host still owns every character it renders. */
+:root[data-rgs-skin][data-rgs-typewriter="on"] [data-rgs-caret]::after {
 	content: "";
 	display: inline-block;
 	width: 0.5em;
@@ -220,7 +221,7 @@ window.__ModuleLoader__.load({
 }
 
 @media (prefers-reduced-motion: reduce) {
-	:root[data-rgs-skin][data-rgs-typewriter="on"] [data-rgs-typing] :is(p, li, pre, h1, h2, h3, h4, h5, h6, blockquote, td, th, dt, dd):last-child::after {
+	:root[data-rgs-skin][data-rgs-typewriter="on"] [data-rgs-caret]::after {
 		animation: none;
 	}
 }
@@ -1041,8 +1042,26 @@ window.__ModuleLoader__.load({
 
 		/* Streaming is readable from the composer: the primary button swaps its
 		   arrow path for a stop rect while a turn runs. The newest reply row then
-		   carries [data-rgs-typing] and the stylesheet puts a blinking caret at the
-		   end of its last text block. */
+		   carries [data-rgs-typing], and exactly one text block inside it carries
+		   [data-rgs-caret] so the stylesheet draws a single blinking caret right
+		   after the last streamed character. */
+		const CARET_BLOCKS = [
+			"p",
+			"li",
+			"pre",
+			"h1",
+			"h2",
+			"h3",
+			"h4",
+			"h5",
+			"h6",
+			"blockquote",
+			"td",
+			"th",
+			"dt",
+			"dd",
+		].join(", ");
+
 		function markTyping() {
 			const rows = document.querySelectorAll('[data-chat-flow-kind="assistant-step"]');
 			let target = null;
@@ -1058,7 +1077,19 @@ window.__ModuleLoader__.load({
 			for (const row of document.querySelectorAll("[data-rgs-typing]")) {
 				if (row !== target) row.removeAttribute("data-rgs-typing");
 			}
-			if (target) target.setAttribute("data-rgs-typing", "");
+			/* Only the LAST block in document order gets the caret: blocks nest
+			   (a <p> holding a list, a <ul> holding <li>), and one caret per nesting
+			   level is what made two cursors appear. */
+			let caret = null;
+			if (target) {
+				target.setAttribute("data-rgs-typing", "");
+				const blocks = target.querySelectorAll(CARET_BLOCKS);
+				caret = blocks.length === 0 ? target : blocks[blocks.length - 1];
+			}
+			for (const node of document.querySelectorAll("[data-rgs-caret]")) {
+				if (node !== caret) node.removeAttribute("data-rgs-caret");
+			}
+			if (caret) caret.setAttribute("data-rgs-caret", "");
 		}
 
 		/* One mark per turn: among the reply rows of a turn (everything after the
@@ -1199,6 +1230,9 @@ window.__ModuleLoader__.load({
 				paddedAnchors.clear();
 				for (const row of document.querySelectorAll("[data-rgs-typing]")) {
 					row.removeAttribute("data-rgs-typing");
+				}
+				for (const node of document.querySelectorAll("[data-rgs-caret]")) {
+					node.removeAttribute("data-rgs-caret");
 				}
 				for (const row of document.querySelectorAll("[data-rgs-turn-start]")) {
 					row.removeAttribute("data-rgs-turn-start");

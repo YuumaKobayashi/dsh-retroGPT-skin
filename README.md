@@ -65,16 +65,25 @@ dsh plugin --help
 
 ### 方法二：通过 npm 安装
 
-也可以使用 npm 下载插件包：
+```bash
+npm install dsh-retrogpt-skin@0.7.5
+```
+
+一定要**带版本号**。早期为了占住包名，先发布过一个 `0.0.0-stage` 的占位包（内容只有一个 `package.json`，没有 `dsh.bundle`），而 npm 的 `latest` 标签还停在那上面。插件管理器"按包名安装"时取的是 `latest`，于是会拿回那个空壳，并报：
+
+> 这个包没有声明组合包，无法作为插件安装
+
+正式版本本身是完整的（含 `dsh.bundle.patch`）。把 `latest` 指回正式版之后，就可以省略版本号：
 
 ```bash
-npm install dsh-retrogpt-skin
+npm dist-tag add dsh-retrogpt-skin@0.7.5 latest   # 需要 npm 登录
+npm unpublish dsh-retrogpt-skin@0.0.0-stage       # 可选：删掉占位包
 ```
 
 如果希望安装到全局 npm 环境：
 
 ```bash
-npm install -g dsh-retrogpt-skin
+npm install -g dsh-retrogpt-skin@0.7.5
 ```
 
 **注意：** npm 安装只负责获取插件文件，并不保证 DeepSeek Harness 会自动识别或启用插件。安装后仍可能需要通过 DSH 插件管理器注册对应 bundle。
